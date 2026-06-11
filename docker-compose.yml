@@ -1,0 +1,102 @@
+services:
+  # Сервис базы данных PostgreSQL
+  db:
+    # Используем официальный образ PostgreSQL 15 на Alpine (легковесный)
+    image: postgres:15-alpine
+    
+    # Имя контейнера для удобного обращения
+    container_name: react_vue_db
+    
+    # Переменные окружения для PostgreSQL
+    environment:
+      # POSTGRES_DB: имя базы данных, которая создастся при старте
+      POSTGRES_DB: react_vue_db
+      
+      # POSTGRES_USER: имя пользователя БД
+      POSTGRES_USER: react_vue_user
+      
+      # POSTGRES_PASSWORD: пароль пользователя
+      POSTGRES_PASSWORD: Qq111111
+    
+    # Проброс портов: порт хоста : порт контейнера
+    # Теперь к БД можно подключиться с хоста через порт 5432
+    ports:
+      - "5432:5432"
+    
+    # Том для сохранения данных БД (чтобы данные не терялись при перезапуске)
+    volumes:
+      - react_vue_postgres_data:/var/lib/postgresql/data
+      - ./init-db:/docker-entrypoint-initdb.d
+    
+    # Проверка здоровья контейнера
+    healthcheck:
+      # pg_isready - утилита для проверки готовности PostgreSQL
+      test: ["CMD-SHELL", "pg_isready -U react_vue_user -d react_vue_db"]
+      interval: 10s      # проверяем каждые 10 секунд
+      timeout: 5s        # ждем ответа 5 секунд
+      retries: 5         # 5 попыток перед пометкой как unhealthy
+    networks:
+      - react_vue_network
+
+  # Сервис API на Koa
+  api:
+    build:
+      context: ./api
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+      - DB_HOST=react_vue_db
+      - DB_USER=react_vue_user
+      - DB_PASSWORD=Qq111111
+      - DB_NAME=react_vue_db
+      - DB_PORT=5432
+    volumes:
+      - ./api:/app
+      - /app/node_modules
+    depends_on:
+      - db
+    networks:
+      - react_vue_network
+
+  # ========== FRONTEND ==========
+  # app:
+  #   build:
+  #     context: ./front
+  #     dockerfile: Dockerfile
+  #   container_name: monorepo_prorab_app
+  #   ports:
+  #     - "8080:80"     # Фронтенд доступен на порту 8080
+  #   networks:
+  #     - monorepo_prorab_network
+  #   profiles:
+  #     - production  # Запускается только с флагом --profile production
+
+  # # ========== FRONTEND - РАЗРАБОТКА С HOT-RELOAD ==========
+  # app-dev:
+  #   build:
+  #     context: ./front
+  #     dockerfile: Dockerfile.dev
+  #   ports:
+  #     - "8080:3000"
+  #   volumes:
+  #     # Монтируем текущую папку проекта в /app контейнера для синхронизации кода
+  #     - ./front:/app
+  #     # Важно: сохраняем node_modules внутри контейнера, не перезаписывая их папкой с хоста
+  #     - /app/node_modules
+  #   environment:
+  #     - CHOKIDAR_USEPOLLING=true
+  #   stdin_open: true # Нужно для работы некоторых инструментов, например, @ionic/vue
+  #   tty: true        # Нужно для работы некоторых инструментов, например, @ionic/vue
+  #   networks:
+  #     - monorepo_prorab_network
+
+# Сеть для связи контейнеров
+networks:
+  react_vue_network:
+    driver: bridge
+
+# Том для данных PostgreSQL
+volumes:
+  react_vue_postgres_data:

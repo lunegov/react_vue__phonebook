@@ -1,0 +1,194 @@
+{
+  "info": {
+    "_postman_id": "82e7a91f-b22e-4bf4-add2-3ee56cdcd2c4",
+    "name": "react_vue__phonebook",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "11222682"
+  },
+  "item": [
+    {
+      "name": "Создание записи",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    \"phone\": \"+1234567890\",\n    \"name\": \"Иван\",\n    \"surname\": \"Петров\",\n    \"secondName\": \"Семенович\",\n    \"email\": \"email@mail.com\",\n    \"description\": \"Краткое или не очень описание контакта\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:3000/phone_book",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3000",
+          "path": [
+            "phone_book"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Обновление записи",
+      "request": {
+        "method": "PATCH",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    \"id\": 4,\n    \"phone\": \"+1234567890\",\n    \"name\": \"Иван411\",\n    \"surname\": \"Петров411\",\n    \"secondName\": \"Семенович4\",\n    \"email\": \"email@mail.com\",\n    \"description\": \"Краткое или не очень описание контакта\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:3000/phone_book",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3000",
+          "path": [
+            "phone_book"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Получение записи по id",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:3000/phone_book/3",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3000",
+          "path": [
+            "phone_book",
+            "3"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Удаление одной записи",
+      "request": {
+        "method": "DELETE",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:3000/phone_book/3",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3000",
+          "path": [
+            "phone_book",
+            "3"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Получение нескольких записей",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:3000/multi_phone_book?ids=1,2,5",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3000",
+          "path": [
+            "multi_phone_book"
+          ],
+          "query": [
+            {
+              "key": "ids",
+              "value": "1,2,5"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Получение всех записей",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:3000/multi_phone_book",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3000",
+          "path": [
+            "multi_phone_book"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Удаление нескольких записей",
+      "request": {
+        "method": "DELETE",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:3000/multi_phone_book?ids=1,2,5",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3000",
+          "path": [
+            "multi_phone_book"
+          ],
+          "query": [
+            {
+              "key": "ids",
+              "value": "1,2,5"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Удаление всех записей",
+      "request": {
+        "method": "DELETE",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:3000/multi_phone_book",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3000",
+          "path": [
+            "multi_phone_book"
+          ]
+        }
+      },
+      "response": []
+    }
+  ]
+}
