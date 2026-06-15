@@ -60,37 +60,39 @@ services:
     networks:
       - react_vue_network
 
-  # ========== FRONTEND ==========
-  # app:
-  #   build:
-  #     context: ./front
-  #     dockerfile: Dockerfile
-  #   container_name: monorepo_prorab_app
-  #   ports:
-  #     - "8080:80"     # Фронтенд доступен на порту 8080
-  #   networks:
-  #     - monorepo_prorab_network
-  #   profiles:
-  #     - production  # Запускается только с флагом --profile production
+  # ========== VUE FRONTEND (PRODUCTION) ==========
+  vue:
+    build:
+      context: ./vue
+      dockerfile: Dockerfile
+    container_name: vue_phonebook
+    ports:
+      - "8081:80"
+    depends_on:
+      - api
+    networks:
+      - react_vue_network
 
-  # # ========== FRONTEND - РАЗРАБОТКА С HOT-RELOAD ==========
-  # app-dev:
-  #   build:
-  #     context: ./front
-  #     dockerfile: Dockerfile.dev
-  #   ports:
-  #     - "8080:3000"
-  #   volumes:
-  #     # Монтируем текущую папку проекта в /app контейнера для синхронизации кода
-  #     - ./front:/app
-  #     # Важно: сохраняем node_modules внутри контейнера, не перезаписывая их папкой с хоста
-  #     - /app/node_modules
-  #   environment:
-  #     - CHOKIDAR_USEPOLLING=true
-  #   stdin_open: true # Нужно для работы некоторых инструментов, например, @ionic/vue
-  #   tty: true        # Нужно для работы некоторых инструментов, например, @ionic/vue
-  #   networks:
-  #     - monorepo_prorab_network
+  # ========== VUE FRONTEND (DEV WITH HOT-RELOAD) ==========
+  vue-dev:
+    build:
+      context: ./vue
+      dockerfile: Dockerfile.dev
+    ports:
+      - "5173:5173"
+    volumes:
+      - ./vue:/app
+      - /app/node_modules
+    environment:
+      - CHOKIDAR_USEPOLLING=true
+      - VITE_API_PROXY_TARGET=http://api:3000
+      - VITE_API_BASE_URL=/api
+    stdin_open: true
+    tty: true
+    networks:
+      - react_vue_network
+    profiles:
+      - dev
 
 # Сеть для связи контейнеров
 networks:
