@@ -13,24 +13,53 @@ http.interceptors.response.use((res) => {
   return res.data.data;
 });
 
-export const fetchAll = (ids?: number[]): Promise<PhoneBookRecord[]> => {
+/**
+ * API метод получения всех контактов
+ * @param ids - список id для получения. Если список undefined, то получаем все
+ * @returns - список контактов
+ */
+export const fetchAll = async (ids?: number[]): Promise<PhoneBookRecord[]> => {
   const params = ids?.length ? { ids: ids.join(',') } : undefined;
-  return http.get('/multi_phone_book', { params });
+  return await http.get('/multi_phone_book', { params });
 };
 
-export const fetchOne = (id: number): Promise<PhoneBookRecord> =>
-  http.get(`/phone_book/${id}`);
+/**
+ * API метод получения 1 контакта
+ * @param id - ИД искомого контакта
+ * @returns - контакти
+ */
+export const fetchOne = async (id: number): Promise<PhoneBookRecord> =>
+  await http.get(`/phone_book/${id}`);
 
-export const createRecord = (data: Omit<PhoneBookRecord, 'id'>): Promise<PhoneBookRecord> =>
-  http.post('/phone_book', data);
+/**
+ * Метод создания контакта
+ * @param data - данные контакта
+ * @returns - созданный контакт с id
+ */
+export const createRecord = async (data: Omit<PhoneBookRecord, 'id'>): Promise<PhoneBookRecord> =>
+  await http.post('/phone_book', data);
 
-export const updateRecord = (data: PhoneBookRecord): Promise<PhoneBookRecord> =>
-  http.patch('/phone_book', data);
+/**
+ * Метод обновления контакта
+ * @param data - данные для обновления
+ * @returns - обновлённый контакт
+ */
+export const updateRecord = async (data: PhoneBookRecord): Promise<PhoneBookRecord> =>
+  await http.patch('/phone_book', data);
 
-export const deleteRecord = (id: number): Promise<null> =>
-  http.delete(`/phone_book/${id}`);
+/**
+ * Метод удаления контакта
+ * @param id - ИД удаляемого контакта
+ */
+export const deleteRecord = async (id: number): Promise<void> => {
+  await http.delete(`/phone_book/${id}`);
+}
 
-export const deleteRecords = (ids: number[]): Promise<null> => {
+/**
+ * Метод удаления нескольких контактов
+ * @param ids - ИД контактов, которые нужно удалить
+ */
+export const deleteRecords = async (ids: number[]): Promise<void> => {
   const params = ids.length ? { ids: ids.join(',') } : undefined;
-  return http.delete('/multi_phone_book', { params });
+  await http.delete('/multi_phone_book', { params });
 };
