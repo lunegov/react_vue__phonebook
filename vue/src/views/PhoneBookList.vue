@@ -1,8 +1,8 @@
 <template>
   <div class="page">
     <div class="header">
-      <h1>Телефонная книга</h1>
-      <button class="add-btn" @click="router.push('/create')" title="Новая запись">+</button>
+      <h1>Контакты</h1>
+      <button class="add-btn" @click="router.push({ name: 'create' })" title="Новая запись">+</button>
     </div>
     <p v-if="loading">Загрузка...</p>
     <p v-else-if="records.length === 0">Записи не найдены.</p>
@@ -10,14 +10,20 @@
       v-else
       :records="records"
       :loading="loading"
-      @edit="(id: number) => router.push(`/edit/${id}`)"
+      @edit="(id: number) => router.push({ name: 'edit', params: { id }})"
       @delete="confirmDelete"
+      @view="openView"
     />
     <ConfirmDialog
       :visible="showConfirm"
       message="Удалить эту запись?"
       @confirm="executeDelete"
       @cancel="showConfirm = false"
+    />
+    <ViewContactModal
+      :visible="showViewModal"
+      :record="viewRecord"
+      @close="closeView"
     />
   </div>
 </template>
@@ -27,13 +33,28 @@ import { ref, onMounted } from 'vue';
 import { usePhoneBook } from '@/composables/usePhoneBook';
 import PhoneBookTable from '@/components/PhoneBookTable.vue';
 import ConfirmDialog from '@/components/ConfirmDialog.vue';
+import ViewContactModal from '@/components/ViewContactModal.vue';
 import { useRouter } from 'vue-router';
+import type { PhoneBookRecord } from '@/types';
 
 const { records, loading, loadAll, remove } = usePhoneBook();
 const router = useRouter();
 
 const deleteTargetId = ref<number | null>(null);
 const showConfirm = ref(false);
+
+const showViewModal = ref(false);
+const viewRecord = ref<PhoneBookRecord | null>(null);
+
+const openView = (record: PhoneBookRecord) => {
+  viewRecord.value = record;
+  showViewModal.value = true;
+};
+
+const closeView = () => {
+  showViewModal.value = false;
+  viewRecord.value = null;
+};
 
 onMounted(() => loadAll());
 

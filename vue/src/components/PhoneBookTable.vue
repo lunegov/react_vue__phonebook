@@ -12,25 +12,25 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="r in records" :key="r.id">
+        <tr v-for="r in records" :key="r.id" class="contact-row" @click="emit('view', r)">
           <td>{{ r.id }}</td>
           <td>{{ r.phone }}</td>
           <td>{{ r.name }}</td>
           <td>{{ r.surname }}</td>
           <td>{{ r.email }}</td>
-          <td class="actions-cell">
+          <td class="actions-cell" @click.stop>
             <div class="dropdown" ref="dropdownRefs" :data-id="r.id">
               <button class="dots-btn" @click.stop="toggleMenu(r.id!)">⋮</button>
               <div v-if="openId === r.id" class="dropdown-menu">
-                <button class="dropdown-item" @click="emit('edit', r.id!)">✎ Изменить</button>
-                <button class="dropdown-item dropdown-item-danger" @click="emit('delete', r.id!)">✕ Удалить</button>
+                <button class="dropdown-item dropdown-item_edit" @click="emit('edit', r.id!)">Редактировать</button>
+                <button class="dropdown-item dropdown-item_remove" @click="emit('delete', r.id!)">Удалить</button>
               </div>
             </div>
           </td>
         </tr>
       </tbody>
     </table>
-    <p v-else-if="!loading">Записи не найдены.</p>
+    <p v-else-if="!loading">Контакты не найдены.</p>
   </div>
 </template>
 
@@ -46,6 +46,7 @@ defineProps<{
 const emit = defineEmits<{
   edit: [id: number];
   delete: [id: number];
+  view: [record: PhoneBookRecord];
 }>();
 
 const openId = ref<number | null>(null);
@@ -73,6 +74,14 @@ onUnmounted(() => document.removeEventListener('click', closeMenu));
 table {
   width: 100%;
   border-collapse: collapse;
+}
+
+.contact-row {
+  cursor: pointer;
+}
+
+.contact-row:hover {
+  background: #f0f8ff;
 }
 
 th,
@@ -128,9 +137,10 @@ th {
 }
 
 .dropdown-item {
+  position: relative;
   display: block;
   width: 100%;
-  padding: 10px 14px;
+  padding: 14px 14px 14px 32px;
   border: none;
   background: none;
   text-align: left;
@@ -139,15 +149,35 @@ th {
   white-space: nowrap;
 }
 
+.dropdown-item::before {
+  content: '';
+  display: block;
+  position: absolute;
+  z-index: 2;
+  left: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 18px;
+}
+
+.dropdown-item_edit::before {
+  content: '✎';
+}
+
+.dropdown-item_remove::before {
+  content: '✕';
+  left: 12px;
+}
+
 .dropdown-item:hover {
   background: #f0f0f0;
 }
 
-.dropdown-item-danger {
+.dropdown-item_remove {
   color: #e74c3c;
 }
 
-.dropdown-item-danger:hover {
+.dropdown-item_remove:hover {
   background: #fde8e8;
 }
 </style>

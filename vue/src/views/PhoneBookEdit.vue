@@ -1,6 +1,6 @@
 <template>
   <div class="page">
-    <h1>{{ id ? 'Редактировать запись' : 'Новая запись' }}</h1>
+    <h1>{{ id ? 'Редактировать контакт' : 'Новый контакт' }}</h1>
     <p v-if="loading">Загрузка...</p>
     <PhoneBookForm v-else :record="record" @save="handleSave" @cancel="handleCancel" />
   </div>
@@ -20,15 +20,18 @@ const { record, loading, load, save } = usePhoneBookRecord();
 const id = route.params.id ? Number(route.params.id) : null;
 
 onMounted(async () => {
-  if (id) await load(id);
+  if (id) {
+    await load(id);
+  }
 });
 
 const handleSave = async (data: PhoneBookRecord) => {
   await save(data);
-  router.push('/');
+
+  router.push({ name: 'list' });
 };
 
 const handleCancel = () => {
-  router.push('/');
+  router.push({ name: 'list' });
 };
 </script>

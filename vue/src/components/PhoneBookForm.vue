@@ -25,14 +25,14 @@
       <textarea v-model="form.description" rows="3"></textarea>
     </div>
     <div class="form-actions">
-      <button type="submit" class="btn">{{ record?.id ? 'Сохранить' : 'Создать' }}</button>
+      <button type="submit" :disabled="!isFormEnable" class="btn">{{ record?.id ? 'Сохранить' : 'Создать' }}</button>
       <button type="button" class="btn btn-secondary" @click="emit('cancel')">Отмена</button>
     </div>
   </form>
 </template>
 
 <script setup lang="ts">
-import { reactive, watch } from 'vue';
+import { computed, reactive, watch } from 'vue';
 import type { PhoneBookRecord, PhoneBookFormData } from '@/types';
 
 const props = defineProps<{
@@ -51,6 +51,10 @@ const form = reactive<PhoneBookFormData>({
   secondName: '',
   email: '',
   description: '',
+});
+
+const isFormEnable = computed((): boolean => {
+  return !!form.phone.trim() && !!form.name.trim();
 });
 
 watch(
@@ -104,7 +108,7 @@ const submit = () => {
   width: 100%;
   padding: 8px;
   border: 1px solid #ccc;
-  border-radius: 4px;
+  border-radius: 8px;
   font-size: 14px;
   box-sizing: border-box;
 }
@@ -127,6 +131,11 @@ const submit = () => {
 
 .btn:hover {
   background: #2980b9;
+}
+
+.btn:disabled {
+  background: #95a5a6;
+  cursor: not-allowed;
 }
 
 .btn-secondary {
