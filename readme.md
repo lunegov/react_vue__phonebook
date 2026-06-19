@@ -21,6 +21,10 @@
 
 ``` docker-compose up --build -d ```
 
+#### Запуск проекта в режиме разработки (live-reload) ####
+
+``` docker-compose --profile dev up --build -d ```
+
 #### Полная остановка проекта ####
 
 ``` docker-compose down -v ```

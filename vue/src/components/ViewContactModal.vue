@@ -5,27 +5,27 @@
       <div class="fields">
         <div class="field">
           <span class="field-label">Телефон</span>
-          <span class="field-value">{{ record.phone }}</span>
+          <span class="field-value">{{ record?.phone }}</span>
         </div>
         <div class="field">
           <span class="field-label">Имя</span>
-          <span class="field-value">{{ record.name }}</span>
+          <span class="field-value">{{ record?.name }}</span>
         </div>
-        <div v-if="record.surname" class="field">
+        <div v-if="record?.surname" class="field">
           <span class="field-label">Фамилия</span>
-          <span class="field-value">{{ record.surname }}</span>
+          <span class="field-value">{{ record?.surname }}</span>
         </div>
-        <div v-if="record.secondName" class="field">
+        <div v-if="record?.secondName" class="field">
           <span class="field-label">Отчество</span>
-          <span class="field-value">{{ record.secondName }}</span>
+          <span class="field-value">{{ record?.secondName }}</span>
         </div>
-        <div v-if="record.email" class="field">
+        <div v-if="record?.email" class="field">
           <span class="field-label">Email</span>
-          <span class="field-value">{{ record.email }}</span>
+          <span class="field-value">{{ record?.email }}</span>
         </div>
-        <div v-if="record.description" class="field">
+        <div v-if="record?.description" class="field">
           <span class="field-label">Описание</span>
-          <span class="field-value">{{ record.description }}</span>
+          <span class="field-value">{{ record?.description }}</span>
         </div>
       </div>
       <div class="dialog-actions">
