@@ -19,9 +19,13 @@
 
 ``` docker-compose up --build -d ```
 
+Посмотреть на http://localhost:8081
+
 #### Запуск проекта в режиме разработки (live-reload) ####
 
 ``` docker-compose --profile dev up --build -d ```
+
+Посмотреть на http://localhost:5173
 
 #### Полная остановка проекта ####
 
